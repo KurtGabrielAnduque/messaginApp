@@ -9,19 +9,19 @@ export default class Status extends React.Component {
   };
 
   componentDidMount() {
-    // 2. NEW API: fetch() replaces getConnectionInfo()
+    // fetch() replaces getConnectionInfo()
     NetInfo.fetch().then((state) => {
       this.setState({ info: state.type });
     });
 
-    // 3. NEW API: addEventListener takes a direct callback
+    // addEventListener takes a direct callback
     this.unsubscribe = NetInfo.addEventListener((state) => {
       this.setState({ info: state.type });
     });
   }
 
   componentWillUnmount() {
-    // 4. NEW API: the listener returns an unsubscribe function directly
+    // the listener returns an unsubscribe function directly
     if (this.unsubscribe) {
       this.unsubscribe();
     }

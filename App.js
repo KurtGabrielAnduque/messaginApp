@@ -4,6 +4,7 @@ import React from 'react';
 import MessageList from './components/MessageList';
 import { createImageMessage, createLocationMessage, createTextMessage } from './utils/MessageUtils';
 import Status from './components/StatusBar';
+import Toolbar from './components/Toolbar';
 
 export default class App extends React.Component {
   state = {
@@ -23,6 +24,7 @@ export default class App extends React.Component {
       }),
     ],
     fullscreenImageId: null,
+    isInputFocused: false,
   };
 
 
@@ -74,12 +76,32 @@ export default class App extends React.Component {
         break;
       // add the case for image sizing
       case 'image':
-        this.setState({ fullscreenImageId: id });
+        this.setState({ fullscreenImageId: id, isInputFocused: false });
         break;
 
       default:
         break;
     }
+  };
+
+  handlePressToolbarCamera = () => {
+    // Placeholder for next lab!
+  };
+
+  handlePressToolbarLocation = () => {
+    // Placeholder for next lab!
+  };
+
+  handleChangeFocus = (isFocused) => {
+    this.setState({ isInputFocused: isFocused });
+  };
+
+  handleSubmit = (text) => {
+    const { messages } = this.state;
+    this.setState({
+      // This creates a new message bubble and adds it to the top of the list!
+      messages: [createTextMessage(text), ...messages], 
+    });
   };
 
   renderMessageList(){
@@ -108,6 +130,21 @@ export default class App extends React.Component {
     );
   };
 
+  renderToolbar() {
+    const { isInputFocused } = this.state;
+    return (
+      <View style={styles.toolbar}>
+        <Toolbar
+          isFocused={isInputFocused}
+          onSubmit={this.handleSubmit}
+          onChangeFocus={this.handleChangeFocus}
+          onPressCamera={this.handlePressToolbarCamera}
+          onPressLocation={this.handlePressToolbarLocation}
+        />
+      </View>
+    );
+  }
+
   render () {
     return(
       <View style={styles.container}>
@@ -116,9 +153,7 @@ export default class App extends React.Component {
       
       {this.renderMessageList()}
       
-      <View style={styles.toolbar}>
-        <Text>toolbar</Text>
-      </View>
+      {this.renderToolbar()}
       
       <View style={styles.inputMethodEditor}>
         <Text>inputMethodEditor</Text>
